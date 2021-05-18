@@ -24,6 +24,8 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public final class ItemStackWrapper extends ItemStack {
 
+    public static boolean WRAP_DETECTION = true;
+    
     private static final String ERROR_MESSAGE = "ItemStackWrappers are immutable and not intended for actual usage.";
 
     private final ItemMeta meta;
@@ -64,7 +66,7 @@ public final class ItemStackWrapper extends ItemStack {
     }
 
     public static @Nonnull ItemStackWrapper ofItem(@Nonnull ItemStack itemStack) {
-        if (itemStack instanceof ItemStackWrapper) {
+        if (WRAP_DETECTION && itemStack instanceof ItemStackWrapper) {
             return (ItemStackWrapper) itemStack;
         }
         return new ItemStackWrapper(itemStack);

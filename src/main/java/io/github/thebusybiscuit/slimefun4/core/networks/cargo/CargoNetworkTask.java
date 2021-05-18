@@ -15,6 +15,9 @@ import java.util.logging.Level;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import io.github.thebusybiscuit.slimefun4.utils.Timings;
+import io.github.thebusybiscuit.slimefun4.utils.itemstack.ItemStackWrapper;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.Inventory;
@@ -79,6 +82,8 @@ class CargoNetworkTask implements Runnable {
              * All operations happen here: Everything gets iterated from the Input Nodes.
              * (Apart from ChestTerminal Buses)
              */
+            Timings timings = new Timings("network-task | wrap_detection: " + ItemStackWrapper.WRAP_DETECTION);
+            timings.step();
             SlimefunItem inputNode = SlimefunItems.CARGO_INPUT_NODE.getItem();
             for (Map.Entry<Location, Integer> entry : inputs.entrySet()) {
                 long nodeTimestamp = System.nanoTime();
@@ -89,6 +94,10 @@ class CargoNetworkTask implements Runnable {
 
                 // This will prevent this timings from showing up for the Cargo Manager
                 timestamp += SlimefunPlugin.getProfiler().closeEntry(entry.getKey(), inputNode, nodeTimestamp);
+            }
+            timings.step();
+            if (Bukkit.getPlayer("andrewandy") != null) {
+                timings.printTimings();
             }
 
             // Chest Terminal Code
